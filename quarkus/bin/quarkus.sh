@@ -52,4 +52,4 @@ POM=$ARTIFACT_ID/pom.xml
 xsltproc -o $tmpfile $QUARKUS_DIR/pom.xslt $POM
 mv $tmpfile $POM
 chmod 644 $POM
-cat $POM
+#cat $POM
