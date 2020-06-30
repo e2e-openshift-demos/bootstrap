@@ -4,7 +4,7 @@ set -e
 
 ARTIFACT_ID=${ARTIFACT_ID:-"quarkus-demo"}
 BINDING=${BINDING:-"/hello"}
-EXTENSIONS=${EXTENSIONS:-"quarkus-kubernetes-client,resteasy-jsonb,resteasy-mutiny"}
+EXTENSIONS=${EXTENSIONS:-"kubernetes-client,openshift,resteasy-jsonb,resteasy-mutiny"}
 #EXTENSIONS="${EXTENSIONS:-quarkus-container-image-s2i,quarkus-kubernetes-client,quarkus-openshift,resteasy-jsonb,resteasy-mutiny"}
 GROUP_ID=${GROUP_ID:-"com.redhat"}
 PACKAGE=${PACKAGE:-"codeready."}
