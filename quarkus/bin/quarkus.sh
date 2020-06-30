@@ -15,7 +15,7 @@ REDHAT_MAVEN_PROFILE_NAME=${REDHAT_MAVEN_PROFILE_NAME:-"red-hat-enterprise-maven
 BACKUP_SETTINGS_XML=true
 
 QUARKUS_DIR=$(dirname $(realpath -e $BASH_SOURCE))
-source $QUARKUS_DIR/../../maven/common.sh
+source $QUARKUS_DIR/../../common/maven.sh
 
 if [ "$USE_REDHAT" = "true" ] ; then
     QUARKUS_MAVEN_PLUGIN_VERSION="1.3.4.Final-redhat-00001"
@@ -34,7 +34,7 @@ mvn io.quarkus:quarkus-maven-plugin:${QUARKUS_MAVEN_PLUGIN_VERSION}:create \
     $([ -z "$BINDING" ] || echo "-Dpath=$BINDING") \
     -Dextensions="$EXTENSIONS"
 
-cat << EOF > $ARTIFACT_ID/src/main/resources/application.properties
+cat > $ARTIFACT_ID/src/main/resources/application.properties << EOF
 quarkus.application.name=$ARTIFACT_ID
 
 quarkus.kubernetes-client.trust-certs=true
@@ -45,6 +45,12 @@ quarkus.openshift.expose=true
 
 #quarkus.kubernetes.deployment-target=knative
 quarkus.kubernetes.deployment-target=openshift
+EOF
+
+mkdir -p $ARTIFACT_ID/.s2i
+
+cat > $ARTIFACT_ID/.s2i/environment << EOF
+ARTIFACT_COPY_ARGS=-p -r lib/ *-runner.jar
 EOF
 
 tmpfile=$(mktemp -p $ARTIFACT_ID)
