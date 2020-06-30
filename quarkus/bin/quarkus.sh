@@ -14,7 +14,8 @@ USE_REDHAT=${USE_REDHAT:-"true"}
 REDHAT_MAVEN_PROFILE_NAME=${REDHAT_MAVEN_PROFILE_NAME:-"red-hat-enterprise-maven-repository"}
 BACKUP_SETTINGS_XML=true
 
-source $(dirname $(realpath -e $BASH_SOURCE))/../../maven/common.sh
+QUARKUS_DIR=$(dirname $(realpath -e $BASH_SOURCE))
+source $QUARKUS_DIR/../../maven/common.sh
 
 if [ "$USE_REDHAT" = "true" ] ; then
     QUARKUS_MAVEN_PLUGIN_VERSION="1.3.4.Final-redhat-00001"
@@ -46,3 +47,9 @@ quarkus.openshift.expose=true
 quarkus.kubernetes.deployment-target=openshift
 EOF
 
+tmpfile=$(mktemp -p $ARTIFACT_ID)
+POM=$ARTIFACT_ID/pom.xml
+xsltproc -o $tmpfile $QUARKUS_DIR/pom.xslt $POM
+mv $tmpfile $POM
+chmod 644 $POM
+cat $POM

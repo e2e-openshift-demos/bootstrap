@@ -3,6 +3,7 @@
 [ "$__MAVEN_COMMON_LOADED__" = "true" ] && return
 
 MAVEN_SETTINGS_XML=~/.m2/settings.xml
+MAVEN_COMMON_DIR=$(dirname $(realpath -e $BASH_SOURCE))
 
 function do_use_redhat() {
     local use=$(echo $USE_REDHAT | tr '[:upper:]' '[:lower:]')
@@ -43,7 +44,7 @@ function add_redhat_profile_description() {
 
     echo "Add Red Hat profile to active profiles of MAVEN user settings.xml..."
     local tmpfile=$(mktemp -p ~/.m2)
-    xsltproc -o $tmpfile --stringparam REDHAT_MAVEN_PROFILE_NAME "$REDHAT_MAVEN_PROFILE_NAME" profile.xslt $MAVEN_SETTINGS_XML
+    xsltproc -o $tmpfile --stringparam REDHAT_MAVEN_PROFILE_NAME "$REDHAT_MAVEN_PROFILE_NAME" $MAVEN_COMMON_DIR/profile.xslt $MAVEN_SETTINGS_XML
     mv $tmpfile $MAVEN_SETTINGS_XML
     chmod 644 $MAVEN_SETTINGS_XML
 #    cat $MAVEN_SETTINGS_XML
