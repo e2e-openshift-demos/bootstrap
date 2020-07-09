@@ -4,8 +4,7 @@ set -e
 
 ARTIFACT_ID=${ARTIFACT_ID:-"quarkus-demo"}
 BINDING=${BINDING:-"/hello"}
-EXTENSIONS=${EXTENSIONS:-"kubernetes-client,openshift,resteasy-jsonb,resteasy-mutiny"}
-#EXTENSIONS="${EXTENSIONS:-quarkus-container-image-s2i,quarkus-kubernetes-client,quarkus-openshift,resteasy-jsonb,resteasy-mutiny"}
+EXTENSIONS=${EXTENSIONS:-"kubernetes-client,openshift,resteasy-jsonb,resteasy-mutiny,smallrye-health,smallrye-openapi"}
 GROUP_ID=${GROUP_ID:-"com.redhat"}
 PACKAGE=${PACKAGE:-"codeready."}
 RESOURCE_NAME=${RESOURCE_NAME:-"ReactiveGreetingResource"}
@@ -32,10 +31,14 @@ mvn io.quarkus:quarkus-maven-plugin:${QUARKUS_MAVEN_PLUGIN_VERSION}:create \
     -DprojectArtifactId="$ARTIFACT_ID" \
     -DclassName="${GROUP_ID}.${PACKAGE}${RESOURCE_NAME}" \
     $([ -z "$BINDING" ] || echo "-Dpath=$BINDING") \
-    -Dextensions="$EXTENSIONS"
+    -Dextensions="$EXTENSIONS" \
+|| true
 
 cat > $ARTIFACT_ID/src/main/resources/application.properties << EOF
 quarkus.application.name=$ARTIFACT_ID
+
+#quarkus.package.uber-jar=true
+#quarkus.package.type=fast-jar
 
 quarkus.kubernetes-client.trust-certs=true
 quarkus.s2i.base-jvm-image=registry.access.redhat.com/ubi8/openjdk-11
@@ -50,7 +53,7 @@ EOF
 mkdir -p $ARTIFACT_ID/.s2i
 
 cat > $ARTIFACT_ID/.s2i/environment << EOF
-ARTIFACT_COPY_ARGS=-p -r lib/ *-runner.jar
+#ARTIFACT_COPY_ARGS=-p -r lib/ *-runner.jar
 EOF
 
 tmpfile=$(mktemp -p $ARTIFACT_ID)
