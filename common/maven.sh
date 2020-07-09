@@ -18,7 +18,7 @@ function do_use_redhat() {
 }
 
 function create_settings_xml() {
-    do_use_redhat || return
+    do_use_redhat || return 0
     [ -r "$MAVEN_SETTINGS_XML" ] && return 0
     echo "Create empty MAVEN user settings.xml..."
     cat > $MAVEN_SETTINGS_XML << EOF
