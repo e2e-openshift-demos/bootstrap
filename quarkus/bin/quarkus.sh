@@ -19,7 +19,7 @@ source $QUARKUS_DIR/../../common/maven.sh
 if [ "$USE_REDHAT" = "true" ] ; then
     QUARKUS_MAVEN_PLUGIN_VERSION="1.3.4.Final-redhat-00001"
 else
-    QUARKUS_MAVEN_PLUGIN_VERSION="1.5.2.Final"
+    QUARKUS_MAVEN_PLUGIN_VERSION="1.6.0.Final"
 fi
 
 [ -r ~/.m2/settings.xml ] || create_settings_xml
